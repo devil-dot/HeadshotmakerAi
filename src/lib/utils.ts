@@ -1,5 +1,3 @@
-import { type ClassValue, clsx } from 'clsx';
-
 /**
  * Convert a File object to Base64 string
  */
