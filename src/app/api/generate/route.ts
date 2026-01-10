@@ -25,67 +25,29 @@ export async function POST(request: NextRequest) {
         // Get the models instance
         const models = getGenerativeModel();
 
-        // EXTREME identity preservation prompt - using editing approach
-        const prompt = `⚠️ CRITICAL IDENTITY PRESERVATION TASK ⚠️
+        // Bengali prompt - works better for facial identity preservation
+        const prompt = `এই ছবিগুলোতে যে ব্যক্তিকে দেখা যাচ্ছে, তার একটি প্রফেশনাল আইডি ফটো তৈরি করুন যেখানে সে ${style} পরিধান করে আছে।
 
-YOU ARE EDITING AN EXISTING PHOTO, NOT CREATING A NEW PERSON.
+গুরুত্বপূর্ণ নির্দেশনা:
+১. এই ছবিগুলোতে যে মানুষটি আছে, তার চেহারা হুবহু একই রাখতে হবে
+২. মুখের কোনো বৈশিষ্ট্য পরিবর্তন করা যাবে না
+৩. চোখ, নাক, মুখ, গালের হাড়, চোয়াল - সবকিছু হুবহু একই রাখতে হবে
+৪. ত্বকের রঙ একই রাখতে হবে
+৫. বয়স একই রাখতে হবে
+৬. দাড়ি-গোঁফ থাকলে সেটাও একই রাখতে হবে
+৭. চুলের রঙ ও স্টাইল একই রাখতে হবে
+৮. তিল, দাগ ইত্যাদি থাকলে সেগুলোও রাখতে হবে
 
-TASK: Take the EXACT person shown in these reference images and create a professional headshot wearing ${style}.
+শুধু পরিবর্তন করতে হবে:
+- পোশাক: ${style}
+- ব্যাকগ্রাউন্ড: হালকা ধূসর বা সাদা
+- লাইটিং: প্রফেশনাল স্টুডিও লাইটিং
+- পোজ: সোজা ক্যামেরার দিকে তাকিয়ে
+- এক্সপ্রেশন: প্রফেশনাল (হালকা হাসি বা নিরপেক্ষ)
 
-🔴 MANDATORY RULES - VIOLATION IS UNACCEPTABLE:
-1. The face MUST be the EXACT SAME person from the reference images
-2. COPY every facial feature EXACTLY from the reference images
-3. This is the SAME INDIVIDUAL - just in professional attire
-4. DO NOT generate a new face
-5. DO NOT create a different person
-6. DO NOT change ANY facial characteristics
-7. PRESERVE 100% facial identity
-8. The person's family should recognize them instantly
+মনে রাখবেন: এটি একটি অফিসিয়াল আইডি ফটো। ব্যক্তির চেহারা ১০০% একই থাকতে হবে। তার পরিবার যেন তাকে চিনতে পারে।
 
-FACIAL FEATURES TO COPY EXACTLY (DO NOT CHANGE):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✓ Face shape and structure (EXACT match required)
-✓ Eye shape, size, color, position (EXACT match required)
-✓ Eyebrow shape, thickness, arch (EXACT match required)
-✓ Nose bridge, width, tip, nostrils (EXACT match required)
-✓ Mouth width, lip thickness, shape (EXACT match required)
-✓ Jawline and chin (EXACT match required)
-✓ Cheekbones position and prominence (EXACT match required)
-✓ Skin tone and complexion (EXACT match required)
-✓ Facial hair pattern and density (EXACT match required)
-✓ Hair color, texture, hairline (EXACT match required)
-✓ Age appearance (EXACT match required)
-✓ Moles, freckles, scars (EXACT match required)
-✓ Facial proportions (EXACT match required)
-✓ Overall appearance (EXACT match required)
-
-WHAT YOU CAN CHANGE:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✓ Clothing → ${style}
-✓ Background → Professional neutral (light gray)
-✓ Lighting → Professional studio lighting
-✓ Pose → Professional headshot pose
-✓ Expression → Professional (slight smile or neutral)
-
-VERIFICATION BEFORE GENERATING:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Ask yourself: "Is this the EXACT SAME person from the reference images?"
-If NO → DO NOT GENERATE. Start over.
-If YES → Proceed with generation.
-
-THINK OF IT THIS WAY:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Imagine the person in the reference images walked into a professional photo studio.
-They changed into ${style}.
-A photographer took their headshot.
-That's what you're creating - NOT a new person.
-
-⚠️ FINAL WARNING:
-If the generated face does not EXACTLY match the reference images, this is a FAILURE.
-The person's identity is SACRED and MUST NOT be altered.
-This is for an official ID photo - accuracy is CRITICAL.
-
-Generate the professional headshot NOW, maintaining PERFECT facial identity.`;
+এখন এই ব্যক্তির প্রফেশনাল হেডশট তৈরি করুন, চেহারা হুবহু একই রেখে।`;
 
         // Prepare contents array with prompt first, then images
         const contents: any[] = [
