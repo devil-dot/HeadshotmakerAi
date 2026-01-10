@@ -25,59 +25,67 @@ export async function POST(request: NextRequest) {
         // Get the models instance
         const models = getGenerativeModel();
 
-        // Construct ultra-detailed prompt for maximum facial accuracy
-        const prompt = `CRITICAL TASK: Create a professional ID photo that EXACTLY matches the person in the reference images.
+        // EXTREME identity preservation prompt - using editing approach
+        const prompt = `⚠️ CRITICAL IDENTITY PRESERVATION TASK ⚠️
 
-STEP 1 - ANALYZE REFERENCE IMAGES:
-Study ALL reference images carefully and identify:
-- Exact face shape (oval, round, square, heart-shaped, etc.)
-- Precise eye characteristics: shape, size, color, eyelid type, eye spacing
-- Exact eyebrow shape, thickness, arch, and position
-- Precise nose structure: bridge width, nostril shape, nose length, tip shape
-- Exact mouth and lip features: lip thickness, mouth width, cupid's bow shape
-- Jawline and chin structure
-- Cheekbone prominence and position
-- Skin tone (exact shade)
-- Facial hair (if any): type, color, density
-- Hair: exact color, texture, hairline
-- Unique identifying features: moles, freckles, scars, dimples, wrinkles
-- Age appearance
-- Facial proportions and symmetry
+YOU ARE EDITING AN EXISTING PHOTO, NOT CREATING A NEW PERSON.
 
-STEP 2 - GENERATE IMAGE:
-Create a professional headshot photo of THIS EXACT SAME PERSON wearing ${style}
+TASK: Take the EXACT person shown in these reference images and create a professional headshot wearing ${style}.
 
-ABSOLUTE REQUIREMENTS - FACIAL IDENTITY:
-🔴 The generated face MUST be IDENTICAL to the reference images
-🔴 DO NOT change ANY facial features
-🔴 DO NOT make the person look younger or older
-🔴 DO NOT change skin tone or complexion
-🔴 DO NOT alter eye color, shape, or size
-🔴 DO NOT modify nose structure
-🔴 DO NOT change mouth or lip shape
-🔴 DO NOT remove or add facial features (moles, freckles, etc.)
-🔴 The person must be IMMEDIATELY recognizable as the same individual
+🔴 MANDATORY RULES - VIOLATION IS UNACCEPTABLE:
+1. The face MUST be the EXACT SAME person from the reference images
+2. COPY every facial feature EXACTLY from the reference images
+3. This is the SAME INDIVIDUAL - just in professional attire
+4. DO NOT generate a new face
+5. DO NOT create a different person
+6. DO NOT change ANY facial characteristics
+7. PRESERVE 100% facial identity
+8. The person's family should recognize them instantly
 
-TECHNICAL REQUIREMENTS:
-- Professional studio lighting (soft, flattering, even)
-- Solid neutral background (light gray #E5E5E5 or soft white #F5F5F5)
-- Direct eye contact with camera
-- Natural professional expression (slight smile or neutral)
-- Sharp focus on face
-- Head and shoulders composition
-- Professional photography quality
-- Proper exposure and color balance
+FACIAL FEATURES TO COPY EXACTLY (DO NOT CHANGE):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Face shape and structure (EXACT match required)
+✓ Eye shape, size, color, position (EXACT match required)
+✓ Eyebrow shape, thickness, arch (EXACT match required)
+✓ Nose bridge, width, tip, nostrils (EXACT match required)
+✓ Mouth width, lip thickness, shape (EXACT match required)
+✓ Jawline and chin (EXACT match required)
+✓ Cheekbones position and prominence (EXACT match required)
+✓ Skin tone and complexion (EXACT match required)
+✓ Facial hair pattern and density (EXACT match required)
+✓ Hair color, texture, hairline (EXACT match required)
+✓ Age appearance (EXACT match required)
+✓ Moles, freckles, scars (EXACT match required)
+✓ Facial proportions (EXACT match required)
+✓ Overall appearance (EXACT match required)
 
-VERIFICATION:
-Before finalizing, verify that:
-✓ Face shape matches reference images exactly
-✓ All facial features are identical to reference
-✓ Skin tone is accurate
-✓ Age appearance is consistent
-✓ Unique features are preserved
-✓ The person is clearly recognizable
+WHAT YOU CAN CHANGE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Clothing → ${style}
+✓ Background → Professional neutral (light gray)
+✓ Lighting → Professional studio lighting
+✓ Pose → Professional headshot pose
+✓ Expression → Professional (slight smile or neutral)
 
-CRITICAL: This is for an official ID photo. The facial identity MUST be 100% accurate. Any deviation from the reference images is UNACCEPTABLE.`;
+VERIFICATION BEFORE GENERATING:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ask yourself: "Is this the EXACT SAME person from the reference images?"
+If NO → DO NOT GENERATE. Start over.
+If YES → Proceed with generation.
+
+THINK OF IT THIS WAY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Imagine the person in the reference images walked into a professional photo studio.
+They changed into ${style}.
+A photographer took their headshot.
+That's what you're creating - NOT a new person.
+
+⚠️ FINAL WARNING:
+If the generated face does not EXACTLY match the reference images, this is a FAILURE.
+The person's identity is SACRED and MUST NOT be altered.
+This is for an official ID photo - accuracy is CRITICAL.
+
+Generate the professional headshot NOW, maintaining PERFECT facial identity.`;
 
         // Prepare contents array with prompt first, then images
         const contents: any[] = [
@@ -102,7 +110,7 @@ CRITICAL: This is for an official ID photo. The facial identity MUST be 100% acc
                 contents: contents,
                 config: {
                     responseModalities: ['IMAGE'],
-                    temperature: 0.2, // Very low for maximum facial consistency
+                    temperature: 0.1, // Absolute minimum for maximum consistency
                     imageConfig: {
                         aspectRatio: '3:4',
                         imageSize: '2K',
