@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
                 contents: contents,
                 config: {
                     responseModalities: ['IMAGE'],
-                    temperature: 0.1, // Absolute minimum for maximum consistency
+                    temperature: 1.0, // Default temperature (same as AI Studio)
                     imageConfig: {
                         aspectRatio: '3:4',
                         imageSize: '2K',
